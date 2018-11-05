@@ -8,8 +8,22 @@ def auth():
 	api = tweepy.API(auth)
 	return api
 
+def get_weather(location):
+	weather = Weather(unit=Unit.CELSIUS)
+	location = weather.lookup_by_location(location)
+	condition = location.condition
+	return condition
 
 if __name__ == "__main__":
 	api = auth()
 	user = api.me()
-	print (user.name)
+	#print (user.name)
+	place = input("What place do you want the weather of?\n")
+	cur_weather = get_weather(place)
+	#or x in cur_weather:
+	#	print(x)
+	try:
+		api.update_status("Currently, " + place + " is "+cur_weather.text +" with a temperature of "+cur_weather.temp + u"\u00b0" +" C")
+	except tweepy.error.TweepError as e:
+		print("oops")
+
